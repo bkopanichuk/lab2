@@ -10,8 +10,8 @@ public class AlgorithmRunner {
     private int retryCount;
 
     public static final int[] DEFAULT_THREAD_COUNTS = {1, 2, 3, 4, 5, 6, 7, 8};
-    public static final int DEFAULT_MAX_NUMBER = 10000000;
-    public static final int DEFAULT_RETRY_COUNT = 20;
+    public static final int DEFAULT_MAX_NUMBER = 1000;
+    public static final int DEFAULT_RETRY_COUNT = 1;
 
     public AlgorithmRunner() {
         this(DEFAULT_THREAD_COUNTS, DEFAULT_MAX_NUMBER, DEFAULT_RETRY_COUNT);

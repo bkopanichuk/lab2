@@ -27,7 +27,7 @@ public class ImrovedBakeryLock implements Lock {
         flag[i].set(true);
         ticket[i].set(findMaximumElement(ticket) + 1);
         for (int k = 0; k < n; k++) {
-            while ((k != i) && flag[k].get() && ((ticket[k].get() < ticket[i].get()) || ((ticket[k].get() == ticket[i].get()) && k < i))) {
+            while ((k != i) && flag[k].get() && (ticket[k].get() < ticket[i].get())) {
                 //spin wait
             }
         }

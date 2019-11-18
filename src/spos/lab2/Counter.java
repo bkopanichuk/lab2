@@ -31,6 +31,7 @@ public class Counter implements Runnable {
             }
             temp = value;
             value = temp + 1;
+
         } finally {
             lock.unlock();
         }
