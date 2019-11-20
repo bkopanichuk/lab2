@@ -9,6 +9,7 @@ import java.util.concurrent.locks.Lock;
 public class ImrovedBakeryLock implements Lock {
     private AtomicBoolean[] flag;
     private AtomicInteger[] ticket;
+    private AtomicInteger ticketCounter;
     private int n;
 
     public ImrovedBakeryLock(int n) {
@@ -19,13 +20,16 @@ public class ImrovedBakeryLock implements Lock {
             flag[i] = new AtomicBoolean();
             ticket[i] = new AtomicInteger();
         }
+        ticketCounter = new AtomicInteger(); //ticketlock
+        ticketCounter.set(0);
     }
 
     @Override
     public void lock() {
         int i = ConcurrencyUtils.getCurrentThreadId();
         flag[i].set(true);
-        ticket[i].set(findMaximumElement(ticket) + 1);
+//        ticket[i].set(findMaximumElement(ticket) + 1);
+        ticket[i].set(ticketCounter.getAndIncrement()); //ticket lock
         for (int k = 0; k < n; k++) {
             while ((k != i) && flag[k].get() && (ticket[k].get() < ticket[i].get())) {
                 //spin wait
