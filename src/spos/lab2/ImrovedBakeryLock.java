@@ -10,36 +10,47 @@ public class ImrovedBakeryLock implements Lock {
     private AtomicBoolean[] flag;
     private AtomicInteger[] ticket;
     private AtomicInteger ticketCounter;
+    private AtomicInteger nowServing;
     private int n;
 
     public ImrovedBakeryLock(int n) {
         this.n = n;
-        flag = new AtomicBoolean[n];
-        ticket = new AtomicInteger[n];
-        for (int i = 0; i < n; i++) {
-            flag[i] = new AtomicBoolean();
-            ticket[i] = new AtomicInteger();
-        }
+//        flag = new AtomicBoolean[n];
+//        ticket = new AtomicInteger[n];
+//        for (int i = 0; i < n; i++) {
+//            flag[i] = new AtomicBoolean();
+//            ticket[i] = new AtomicInteger();
+//        }
         ticketCounter = new AtomicInteger(); //ticketlock
         ticketCounter.set(0);
+        nowServing = new AtomicInteger();
+        nowServing.set(0);
     }
 
     @Override
     public void lock() {
-        int i = ConcurrencyUtils.getCurrentThreadId();
-        flag[i].set(true);
+//        int i = ConcurrencyUtils.getCurrentThreadId();
+//        flag[i].set(true);
 //        ticket[i].set(findMaximumElement(ticket) + 1);
-        ticket[i].set(ticketCounter.getAndIncrement()); //ticket lock
-        for (int k = 0; k < n; k++) {
-            while ((k != i) && flag[k].get() && (ticket[k].get() < ticket[i].get())) {
-                //spin wait
-            }
+//        ticket[i].set(ticketCounter.getAndIncrement()); //ticket lock
+//        for (int k = 0; k < n; k++) {
+//            while ((k != i) && flag[k].get() && (ticket[k].get() < ticket[i].get())) {
+//                //spin wait
+//            }
+//        }
+
+        int ticket = ticketCounter.getAndIncrement();
+
+        while (nowServing.get() != ticket) {
+            Thread.yield();
         }
     }
 
     @Override
     public void unlock() {
-        flag[ConcurrencyUtils.getCurrentThreadId()].set(false);
+//        flag[ConcurrencyUtils.getCurrentThreadId()].set(false);
+        int successor = nowServing.get() + 1;
+        nowServing.set(successor);
     }
 
     private int findMaximumElement(AtomicInteger[] elementArray) {
