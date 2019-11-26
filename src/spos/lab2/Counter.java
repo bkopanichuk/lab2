@@ -26,7 +26,6 @@ public class Counter implements Runnable {
         long temp;
         lock.lock();
         try {
-            System.out.println(ConcurrencyUtils.getCurrentThreadId());
             if (value >= maxNumber) {
                 return value;
             }

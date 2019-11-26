@@ -40,7 +40,7 @@ public class ImrovedBakeryLock implements Lock {
 //        }
 
         int ticket = ticketCounter.getAndIncrement();
-
+        System.out.println(ticket);
         while (nowServing.get() != ticket) {
             Thread.yield();
         }
